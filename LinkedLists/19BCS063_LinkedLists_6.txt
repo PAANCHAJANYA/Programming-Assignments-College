@@ -1,0 +1,167 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node *link;
+};
+struct node *head = NULL, *x, *y, *z;
+void create();
+void ins_at_beg();
+void ins_at_pos();
+void del_at_beg();
+void del_at_pos();
+void traverse();
+int main()
+{
+    int ch;
+    printf("\n1.Creation\n2.Insertion at beginning\n3.Insertion at a position\n4.Deletion at beginning\n5.Deletion at a position\n6.traverse\n7.Exit");
+    while(1)
+    {
+        printf("\nEnter your choice:");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+        case 1:
+            create();
+            break;
+        case 2:
+            ins_at_beg();
+            break;
+        case 3:
+            ins_at_pos();
+            break;
+        case 4:
+            del_at_beg();
+            break;
+        case 5:
+            del_at_pos();
+            break;
+        case 6:
+            traverse();
+            break;
+        case 7:
+            exit(0);
+        default:
+            printf("\nWrong Choice!");
+        }
+    }
+    return 0;
+}
+void create()
+{
+    int c;
+    x=(struct node*)malloc(sizeof(struct node));
+    printf("\nEnter the data to be stored:");
+    scanf("%d",&x->data);
+    x->link=x;
+    head=x;
+    printf("\nIf you wish to continue press 1 otherwise 0:");
+    scanf("%d",&c);
+    while(c!= 0)
+    {
+        y=(struct node*)malloc(sizeof(struct node));
+        printf("\nEnter the data to be stored:");
+        scanf("%d",&y->data);
+        x->link=y;
+        y->link=head;
+        x=y;
+        printf("\nIf you wish to continue press 1 otherwise 0:");
+        scanf("%d",&c);
+    }
+}
+void ins_at_beg()
+{
+    x=head;
+    y=(struct node*)malloc(sizeof(struct node));
+    printf("\nEnter the data to be stored:");
+    scanf("%d",&y->data);
+    while(x->link!=head)
+        x = x->link;
+    x->link=y;
+    y->link=head;
+    head=y;
+}
+void ins_at_pos()
+{
+    struct node *ptr;
+    int c=1,pos,count=1;
+    y=(struct node*)malloc(sizeof(struct node));
+    if(head==NULL)
+        printf("\nCannot enter an element at this place!");
+    printf("\nEnter the data to be stored:");
+    scanf("%d",&y->data);
+    printf("\nEnter the position where the data is to be inserted:");
+    scanf("%d",&pos);
+    x=head;
+    ptr=head;
+    while(ptr->link!=head)
+    {
+        count++;
+        ptr=ptr->link;
+    }
+    count++;
+    if(pos>count)
+    {
+        printf("\nOUT OF BOUND!");
+        return;
+    }
+    while (c<pos)
+    {
+        z=x;
+        x=x->link;
+        c++;
+    }
+    y->link=x;
+    z->link=y;
+}
+void del_at_beg()
+{
+    if (head==NULL)
+        printf("\nThe list is empty!");
+    else
+    {
+        x=head;
+        y=head;
+        while(x->link!=head)
+            x=x->link;
+        head=y->link;
+        x->link=head;
+        free(y);
+    }
+}
+void del_at_pos()
+{
+    if(head==NULL)
+        printf("\nThe list is empty!");
+    else
+    {
+        int c=1,pos;
+        printf("\nEnter the position of the node which is to be deleted:");
+        scanf("%d",&pos);
+        x=head;
+        while(c<pos)
+        {
+            y=x;
+            x=x->link;
+            c++;
+        }
+        y->link=x->link;
+        free(x);
+    }
+}
+void traverse()
+{
+    if(head==NULL)
+        printf("\nThe list is empty!");
+    else
+    {
+        x=head;
+        while(x->link!= head)
+        {
+            printf("%d->",x->data);
+            x=x->link;
+        }
+        printf("%d", x->data);
+    }
+}

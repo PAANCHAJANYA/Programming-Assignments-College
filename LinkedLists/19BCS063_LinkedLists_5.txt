@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int coef,expo;
+    struct node* next;
+};
+int c;
+struct node* insertpoly(struct node* thead,int c,int e);
+void display(struct node* thead);
+int main()
+{
+    int a,b,n,i;
+    struct node* polyhead;
+    printf("\nEnter number of terms in the polynomial:");
+    polyhead=NULL;
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        printf("\nEnter a coefficient and exponent of the term %d:",i+1);
+        scanf("%d%d",&a,&b);
+        polyhead=insertpoly(polyhead,a,b);
+    }
+    printf("\nThe polynomial is: ");
+    display(polyhead);
+}
+struct node* insertpoly(struct node* thead,int c,int e)
+{
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->coef=c;
+    newnode->expo=e;
+    if(thead==NULL)
+    {
+        newnode->next=NULL;
+        return newnode;
+    }
+    struct node* prev,* curr;
+    prev=curr=thead;
+    while(curr!=NULL&&curr->expo>e)
+    {
+        prev=curr;
+        curr=curr->next;
+    }
+    if(curr==thead)
+    {
+        newnode->next=curr;
+        return newnode;
+    }
+    else if(curr==NULL)
+    {
+        prev->next=newnode;
+        newnode->next=NULL;
+    }
+    else
+    {
+        newnode->next=curr;
+        prev->next=newnode;
+    }
+    return thead;
+}
+void display(struct node* thead)
+{
+    struct node* temp=thead;
+    if(temp==NULL)
+        printf("\nEmpty..");
+    else
+    {
+        while(temp->next!=NULL)
+        {
+            printf("(%d)x^%d+",temp->coef,temp->expo);
+            temp=temp->next;
+        }
+       printf("%dx^%d",temp->coef,temp->expo);
+    }
+}

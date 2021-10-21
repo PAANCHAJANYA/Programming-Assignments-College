@@ -1,0 +1,47 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 10
+struct node
+{
+    int data;
+    struct node* next;
+}*list,*itr,*q;
+void insert_end(int i)
+{
+    int num;
+    struct node *t=(struct node*)malloc(sizeof(struct node));
+    printf("\nEnter the data of Node %d:",i);
+    scanf("%d",&num);
+    t->data=num;
+    t->next=NULL;
+    if(list==NULL)
+        list=t;
+    else
+    {
+        q=list;
+        while(q->next!=NULL)
+        q=q->next;
+        q->next=t;
+    }
+}
+
+int main()
+{
+    int n,i,row,col,j;
+    int *arr;
+    printf("\nEnter the number of nodes you want to insert in the linked list:");
+    scanf("%d",&n);
+    for(i=1;i<=n;i++)
+        insert_end(i);
+    arr=(int*)calloc(n,sizeof(int));
+    itr=list;
+    for(i=0;i<n;i++)
+    {
+        arr[i]=itr->data;
+        itr=itr->next;
+    }
+    printf("\nArray:");
+    for(i=0;i<n;i++)
+        printf("%d ",arr[i]);
+    return 0;
+}

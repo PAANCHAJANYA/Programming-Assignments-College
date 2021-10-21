@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node* next;
+};
+struct node* head;
+void insert(int data);
+void countNodes();
+int main()
+{
+    head=NULL;
+    int data,i=1;
+    char another='Y';
+    while(another=='Y')
+    {
+        printf("\nEnter the Element %d in the linked list:",i);
+        scanf("%d",&data);
+        insert(data);
+        i++;
+        fflush(stdin);
+        printf("\nDo you want to enter another number (Y/N) :");
+        scanf("%c",&another);
+    }
+    countNodes();
+    return 0;
+}
+void insert(int data)
+{
+    struct node* temp=(struct node*)malloc(sizeof(struct node));
+    temp->data=data;
+    temp->next=head;
+    head=temp;
+}
+void countNodes()
+{
+    struct node* temp=head;
+    int count=0;
+    while(temp!=NULL)
+    {
+       temp=temp->next;
+       count++;
+    }
+    printf("\nTotal number of nodes in the Linked List is %d",count);
+}
