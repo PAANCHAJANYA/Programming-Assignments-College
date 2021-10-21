@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct stack
+{
+	int top;
+	int capacity;
+	char* arr;
+};
+struct stack* createStack(int capacity)
+{
+	struct stack* stack=(struct stack*)malloc(sizeof(struct stack));
+	stack->capacity=capacity;
+	stack->top=-1;
+	stack->arr=(char*)malloc(stack->capacity*sizeof(char));
+	return stack;
+}
+int isFull(struct stack* stack)
+{
+	return stack->top==stack->capacity-1;
+}
+int isEmpty(struct stack* stack)
+{
+	return stack->top==-1;
+}
+void push(struct stack* stack)
+{
+    char item;
+	if(isFull(stack))
+    {
+       printf("\nThe stack is full!");
+       return;
+    }
+    fflush(stdin);
+    printf("\nEnter the data item to be pushed onto the stack:");
+    scanf("%c",&item);
+	stack->arr[++stack->top]=item;
+	printf("\n%c is pushed to the Stack",item);
+}
+void pop(struct stack* stack)
+{
+	if(isEmpty(stack))
+    {
+        printf("\nThe stack is empty!");
+        return;
+    }
+    printf("\n%c popped from the stack",stack->arr[stack->top--]);
+}
+int main()
+{
+    int n,choice,i;
+    printf("\nEnter the capacity of stack you want to create:");
+    scanf("%d",&n);
+	struct stack* stack=createStack(n);
+	while(1)
+    {
+        printf("\n1. Push an element onto the stack\n2. Pop an element from the stack\n3. Display the stack along with the memory locations\n4. Exit");
+        printf("\nEnter your choice:");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+        case 1:
+            push(stack);
+            fflush(stdin);
+            break;
+        case 2:
+            pop(stack);
+            break;
+        case 3:
+            printf("\nElement\t\tAddress");
+            for(i=0;i<=stack->top;i++)
+                printf("\n%c\t\t%p",stack->arr[stack->top-i],&stack->arr[stack->top-i]);
+            break;
+        case 4:
+            exit(0);
+        }
+    }
+	return 0;
+}
