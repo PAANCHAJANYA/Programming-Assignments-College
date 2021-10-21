@@ -1,0 +1,95 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+struct node *front;
+struct node *rear;
+void enqueue();
+int queuesfront();
+void display();
+int main()
+{
+    int choice,frontNum;
+    while(choice!=4)
+    {
+        printf("\n1. Add an element to the queue\n2. Call the function queuesfront()\n3. Display the queue\n4. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+                enqueue();
+                break;
+            case 2:
+                frontNum=queuesfront();
+                printf("\n%d is returned by the function",frontNum);
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                exit(0);
+                break;
+            default:
+                printf("\nNot a valid choice!");
+        }
+    }
+}
+void enqueue()
+{
+    struct node *ptr;
+    int item;
+    ptr=(struct node*)malloc(sizeof(struct node));
+    printf("\nEnter the value to be enqueued:");
+    scanf("%d",&item);
+    ptr->data=item;
+    if(front==NULL)
+    {
+        front=ptr;
+        rear=ptr;
+        front->next=NULL;
+        rear->next=NULL;
+    }
+    else
+    {
+        rear->next=ptr;
+        rear=ptr;
+        rear->next=NULL;
+    }
+}
+int queuesfront()
+{
+    struct node *ptr;
+    int k;
+    if(front==NULL)
+    {
+        printf("\nThe queue is empty");
+        exit(1);
+    }
+    else
+    {
+        ptr=front;
+        k=ptr->data;
+        front=front->next;
+        free(ptr);
+    }
+    return (k);
+}
+void display()
+{
+    struct node *ptr;
+    ptr=front;
+    if(front==NULL)
+        printf("\nEmpty queue!");
+    else
+    {
+        while(ptr!=NULL)
+        {
+            printf("\n%d",ptr->data);
+            ptr=ptr->next;
+        }
+    }
+}

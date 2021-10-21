@@ -1,0 +1,113 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+struct node *front;
+struct node *rear;
+void enqueue();
+void dequeue();
+void display();
+void countElements();
+int main()
+{
+    int choice;
+    while(choice!=4)
+    {
+        printf("\n1. Add an element to the queue\n2. Pop an element from the queue\n3. Display the queue\n4. Count the number of elements in the queue\n5. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+                enqueue();
+                break;
+            case 2:
+                dequeue();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                countElements();
+                break;
+            case 5:
+                exit(0);
+                break;
+            default:
+                printf("\nNot a valid choice!");
+        }
+    }
+}
+void enqueue()
+{
+    struct node *ptr;
+    int item;
+    ptr=(struct node*)malloc(sizeof(struct node));
+    printf("\nEnter the value to be enqueued:");
+    scanf("%d",&item);
+    ptr->data=item;
+    if(front==NULL)
+    {
+        front=ptr;
+        rear=ptr;
+        front->next=NULL;
+        rear->next=NULL;
+    }
+    else
+    {
+        rear->next=ptr;
+        rear=ptr;
+        rear->next=NULL;
+    }
+}
+void dequeue()
+{
+    struct node *ptr;
+    if(front==NULL)
+    {
+        printf("\nThe queue is empty");
+        return;
+    }
+    else
+    {
+        ptr=front;
+        printf("\n%d is popped out from the front side of the queue.",ptr->data);
+        front=front->next;
+        free(ptr);
+    }
+}
+void display()
+{
+    struct node *ptr;
+    ptr=front;
+    if(front==NULL)
+        printf("\nEmpty queue!");
+    else
+    {
+        while(ptr!=NULL)
+        {
+            printf("\n%d",ptr->data);
+            ptr=ptr->next;
+        }
+    }
+}
+void countElements()
+{
+    struct node *ptr;
+    int count=0;
+    ptr=front;
+    if(front==NULL)
+        printf("\nThere are no elements in this queue!");
+    else
+    {
+        while(ptr!=NULL)
+        {
+            count++;
+            ptr=ptr->next;
+        }
+    }
+    printf("\nThere are %d elements in the queue",count);
+}

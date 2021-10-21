@@ -1,0 +1,121 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+}*rear,*front,*temp,*newNode;
+void create()
+{
+    front=rear=NULL;
+}
+void enqueue(int data)
+{
+    newNode=(struct node*)malloc(sizeof(struct node));
+    newNode->data=data;
+    newNode->next=NULL;
+    if(front==NULL)
+    front=rear=newNode;
+    else
+    {
+        rear->next=newNode;
+        rear=newNode;
+    }
+    rear->next=front;
+}
+void insPtclr()
+{
+    int i,k,item;
+    struct node *temp, *t;
+    printf("\nEnter the position at which you want to insert an element in the queue");
+    scanf("%d",&k);
+    printf("\nEnter the data of the element you want to insert in the queue");
+    scanf("%d",&item);
+    t=(struct node*)malloc(sizeof(struct node));
+    t->data=item;
+    if(k==1)
+    {
+        t->next=front;
+        front=t;
+        rear->next=front;
+        return;
+    }
+    temp=front;
+    for(i=1;i<k-1;i++)
+        temp=temp->next;
+    t->next=temp->next;
+    temp->next=t;
+}
+int dequeue()
+{
+    int x;
+    if(front==NULL)
+        return -1;
+    else if(front==rear)
+    {
+        x=front->data;
+        free(front);
+        front=rear=NULL;
+    }
+    else
+    {
+        struct node *temp=front;
+        x=temp->data;
+        front=front->next;
+        rear->next=front;
+        free(temp);
+    }
+    return x;
+}
+int empty()
+{
+    if(front==NULL)
+        return 1;
+    else
+        return 0;
+}
+void display()
+{
+    struct node* temp=front;
+    printf("\nCircular Queue: ");
+    do
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }while(temp!=front);
+}
+int main()
+{
+    int num,choice;
+    while(1)
+    {
+        printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Insert an element at kth position\n5. Exit\nEnter your choice: ");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+                printf("\nEnter the item to be enqueued: ");
+                scanf("%d",&num);
+                enqueue(num);
+                break;
+            case 2:
+                if(!(empty()))
+                    printf("\nDequeued element: %d",dequeue());
+                else
+                    printf("\nThe Queue is empty!");
+                    break;
+            case 3:
+                display();
+                break;
+            case 4:
+                insPtclr();
+                break;
+            case 5:
+                exit(0);
+                break;
+            default:
+                printf("\nWrong Choice!");
+        }
+    }
+    return 0;
+}
