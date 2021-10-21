@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+    struct record
+    {
+        char name[15];
+        int age;
+        float salary;
+    }*arr;
+    int n,i;
+    printf("\nEnter the number of persons whose record is to be maintained:");
+    scanf("%d",&n);
+    arr=(struct record*)calloc(n,sizeof(struct record));
+    for(i=1;i<=n;i++)
+    {
+        printf("\nEnter the Name, Age and Salary of Person %d:",i);
+        scanf("%s%d%f",&arr[i].name,&arr[i].age,&arr[i].salary);
+    }
+    printf("\nNAME\t\tAGE\tSALARY\t\t&NAME\t\t&AGE\t\t&SALARY");
+    for(i=1;i<=n;i++)
+        printf("\n%s\t\t%d\t%.2f\t%p\t%p\t%p",arr[i].name,arr[i].age,arr[i].salary,&(arr[i].name),&arr[i].age,&arr[i].salary);
+    return 0;
+}

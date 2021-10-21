@@ -1,0 +1,12 @@
+#include<stdio.h>
+int main()
+{
+    int arr[5], i;
+    printf("\nEnter the five elements of the array:");
+    for(i=0;i<5;i++)
+        scanf("%d",&arr[i]);
+    printf("\nELEMENT\t\tADDRESS");
+    for(i=0;i<5;i++)
+        printf("\n%p\t\t%d",&arr[i],arr[i]);
+    return 0;
+}

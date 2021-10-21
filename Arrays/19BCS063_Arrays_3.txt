@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+    char str1[20], str2[20], str3[20];
+    int i=0,j=0,o,pos,x;
+    printf("\nEnter the first string:");
+    scanf("%[^\n]s",str1);
+    fflush(stdin);
+    printf("\nEnter the second string to be inserted at i=1 to the first string:");
+    scanf("%[^\n]s",str2);
+    printf("\nEnter the position where the sub-string needs to be inserted:");
+    scanf("%d",&pos);
+    strcpy(str3,str1);
+    o=pos+strlen(str2);
+    for(i=pos;i<strlen(str1)+strlen(str2);i++)
+    {
+        x=str3[i];
+        if(j<strlen(str2))
+        {
+            str1[i]=str2[j];
+            j+=1;
+        }
+        str1[o]=x;
+        o+=1;
+    }
+    printf("\n%s",str1);
+    return 0;
+}

@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main()
+{
+    int arr[5], i, *arrptr[5];
+    printf("\nEnter the five elements of the array:");
+    for(i=0;i<5;i++)
+        scanf("%d",&arr[i]);
+    for(i=0;i<5;i++)
+        arrptr[i]=&arr[i];
+    printf("\nArray of pointers: ");
+    for(i=0;i<5;i++)
+        printf("%d ",arrptr[i]);
+    printf("\n\nELEMENT\t\tADDRESS");
+    for(i=0;i<5;i++)
+        printf("\n%u\t\t%d",&arr[i],arr[i]);
+    return 0;
+}

@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+    int len, *arr, i, n, j, last;
+    printf("\nEnter the number of elements you are going to insert in the array:");
+    scanf("%d",&len);
+    arr=(int*)calloc(len,sizeof(int));
+    printf("\nEnter the elements of the array:");
+    for(i=0;i<len;i++)
+        scanf("%d",&arr[i]);
+    printf("\nEnter the number of times the array should be shifted in a circular way:");
+    scanf("%d",&n);
+    printf("\nOriginal Array: ");
+    for(i=0;i<len;i++)
+        printf("%d ",arr[i]);
+    for(i=0;i<n;i++)
+    {
+        last=arr[len-1];
+        for(j=len-1;j>0;j--)
+            arr[j]=arr[j-1];
+        arr[0]=last;
+    }
+    printf("\nArray after shifting circularly:");
+    for(i=0;i<len;i++)
+        printf("%d ",arr[i]);
+    printf("\n");
+    return 0;
+}
