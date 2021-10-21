@@ -1,0 +1,371 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define new_node (struct node*)malloc(sizeof(struct node))
+struct node
+{
+    int LOC;
+    int item;
+    struct node *next;
+};
+struct node *adj_list[10];
+int n;
+void read_graph()
+{
+    int i,j;
+    char reply;
+    struct node *p,*c;
+    for(i=1;i<=n;i++)
+    {
+        for (j=1;j<=n;j++)
+        {
+            if(i==j)
+                continue;
+            fflush(stdin);
+            printf("\nVertices %d & %d are Adjacent?(Y/N):", i, j);
+            fflush(stdin);
+            scanf("%c",&reply);
+            if(reply=='y'||reply=='Y')
+            {
+                c=new_node;
+                c->LOC=j;
+                c->next=NULL;
+                if(adj_list[i]==NULL)
+                    adj_list[i]=c;
+                else
+                {
+                    p=adj_list[i];
+                    while(p->next!=NULL)
+                        p=p->next;
+                    p->next=c;
+                    (p->next)->next=NULL;
+                }
+            }
+        }
+    }
+}
+void dir_graph()
+{
+    struct node *p;
+    int i,j,data;
+    printf("\nEnter the number of Vertices (<10): ");
+    scanf("%d",&n);
+    for(i=1;i<=n;i++)
+        adj_list[i]=NULL;
+    read_graph(n);
+    for(i=1;i<=n;i++)
+    {
+        printf("\nEnter the item that is to be stored in the vertex %d",i);
+        scanf("%d",&data);
+        adj_list[i]->item=data;
+    }
+}
+void findLoc(int data)
+{
+    int i;
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            if(adj_list[i]->item==data)
+            {
+                printf("\nThe item of magnitude %d is at vertex %d",data,i);
+                break;
+            }
+        }
+    }
+}
+void delItem(int data)
+{
+    int i,loca,num;
+    struct node *p, *t;
+    for(i=1;i<=n;i++)
+    {
+        if(data==adj_list[i]->item)
+        {
+            loca=i;
+            adj_list[i]=NULL;
+            break;
+        }
+    }
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            p=adj_list[i];
+            while(p->next!=NULL)
+            {
+                if((p->next)->LOC==loca)
+                {
+                    t=p->next;
+                    p->next=NULL;
+                    p->next=t->next;
+                    t->next=NULL;
+                    free(t);
+                    continue;
+                }
+                p=p->next;
+            }
+        }
+    }
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            if(adj_list[i]->LOC==loca)
+            {
+                num=adj_list[i]->item;
+                adj_list[i]=adj_list[i]->next;
+                adj_list[i]->item=num;
+            }
+        }
+    }
+}
+void findEdge(int item1,int item2)
+{
+    int vertex1,vertex2,i;
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            if(adj_list[i]->item==item1)
+            {
+                vertex1=i;
+                break;
+            }
+        }
+    }
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            if(adj_list[i]->item==item2)
+            {
+                vertex2=i;
+                break;
+            }
+        }
+    }
+    printf("\nEdge joining items of magnitude %d and %d is the line joining vertex %d and vertex %d",item1,item2,vertex1,vertex2);
+}
+void deleteEdge(int item1,int item2)
+{
+    int vertex1,vertex2,i,num;
+    struct node *p, *t;
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            if(adj_list[i]->item==item1)
+            {
+                vertex1=i;
+                break;
+            }
+        }
+    }
+    for(i=1;i<=n;i++)
+    {
+        if(adj_list[i]!=NULL)
+        {
+            if(adj_list[i]->item==item2)
+            {
+                vertex2=i;
+                break;
+            }
+        }
+    }
+    if(adj_list[vertex1]!=NULL)
+    {
+        p=adj_list[vertex1];
+        while(p->next!=NULL)
+        {
+            if((p->next)->LOC==vertex2)
+            {
+                t=p->next;
+                p->next=NULL;
+                p->next=t->next;
+                t->next=NULL;
+                free(t);
+                continue;
+            }
+            p=p->next;
+        }
+    }
+    if(adj_list[vertex1]!=NULL)
+    {
+        if(adj_list[vertex1]->LOC==vertex2)
+        {
+            num=adj_list[vertex1]->item;
+            adj_list[vertex1]=adj_list[vertex1]->next;
+            adj_list[vertex1]->item=num;
+        }
+    }
+    if(adj_list[vertex2]!=NULL)
+    {
+        p=adj_list[vertex2];
+        while(p->next!=NULL)
+        {
+            if((p->next)->LOC==vertex1)
+            {
+                t=p->next;
+                p->next=NULL;
+                p->next=t->next;
+                t->next=NULL;
+                free(t);
+                continue;
+            }
+            p=p->next;
+        }
+    }
+    if(adj_list[vertex2]!=NULL)
+    {
+        if(adj_list[vertex2]->LOC==vertex1)
+        {
+            num=adj_list[vertex2]->item;
+            adj_list[vertex2]=adj_list[vertex2]->next;
+            adj_list[vertex2]->item=num;
+        }
+    }
+
+}
+int main()
+{
+    int option,suboption,item,item1,item2,j,i;
+    struct node *c, *p;
+    char reply;
+    do
+    {
+        printf("\n1. Create a directed Graph\n2. Exit");
+        fflush(stdin);
+        printf("\nEnter your choice: ");
+        fflush(stdin);
+        scanf("%d",&option);
+        switch(option)
+        {
+            case 1:
+                dir_graph();
+                do
+                {
+                    printf("\n1. Find the location of the first node containing ITEM\n2. Delete the first node in the list containing ITEM\n3. Find the location of an edge (A, B)\n4. Insert node in the graph\n5. Delete the edge (A, B)\n6. Display the graph\n7. Exit");
+                    printf("\nEnter your choice: ");
+                    fflush(stdin);
+                    scanf("%d",&suboption);
+                    fflush(stdin);
+                    switch(suboption)
+                    {
+                    case 1:
+                        fflush(stdin);
+                        printf("\nEnter the ITEM whose location is to be obtained:");
+                        fflush(stdin);
+                        scanf("%d",&item);
+                        findLoc(item);
+                        break;
+                    case 2:
+                        fflush(stdin);
+                        printf("\nEnter the ITEM which is to be deleted:");
+                        fflush(stdin);
+                        scanf("%d",&item);
+                        delItem(item);
+                        break;
+                    case 3:
+                        fflush(stdin);
+                        printf("\nEnter the two ITEMs whose edge is to be obtained:");
+                        fflush(stdin);
+                        scanf("%d%d",&item1,&item2);
+                        findEdge(item1,item2);
+                        break;
+                    case 4:
+                        fflush(stdin);
+                        printf("\nEnter the ITEM which is to be inserted in the graph:");
+                        fflush(stdin);
+                        scanf("%d",&item);
+                        n+=1;
+                        adj_list[n]=NULL;
+                        for(j=1;j<n;j++)
+                        {
+                            fflush(stdin);
+                            printf("\nVertices %d & %d are Adjacent?(Y/N):", n, j);
+                            scanf("%c",&reply);
+                            fflush(stdin);
+                            if(reply=='y'||reply=='Y')
+                            {
+                                c=new_node;
+                                c->LOC=j;
+                                c->next=NULL;
+                                if(adj_list[n]==NULL)
+                                    adj_list[n]=c;
+                                else
+                                {
+                                    p=adj_list[n];
+                                    while(p->next!=NULL)
+                                        p=p->next;
+                                    p->next=c;
+                                    (p->next)->next=NULL;
+                                }
+                            }
+                        }
+                        for(j=1;j<n;j++)
+                        {
+                            fflush(stdin);
+                            printf("\nVertices %d & %d are Adjacent?(Y/N):", j, n);
+                            scanf("%c",&reply);
+                            fflush(stdin);
+                            if(reply=='y'||reply=='Y')
+                            {
+                                c=new_node;
+                                c->LOC=n;
+                                c->next=NULL;
+                                if(adj_list[j]==NULL)
+                                    adj_list[j]=c;
+                                else
+                                {
+                                    p=adj_list[j];
+                                    while(p->next!=NULL)
+                                        p=p->next;
+                                    p->next=c;
+                                    (p->next)->next=NULL;
+                                }
+                            }
+                        }
+                        break;
+                    case 5:
+                        fflush(stdin);
+                        printf("\nEnter the two ITEMs whose edge is to be deleted:");
+                        fflush(stdin);
+                        scanf("%d%d",&item1,&item2);
+                        deleteEdge(item1,item2);
+                        break;
+                    case 6:
+                        for(i=1;i<=n;i++)
+                        {
+                            if(adj_list[i]==NULL)
+                            {
+                                printf("\n%d DELETED",i);
+                                continue;
+                            }
+                            p=adj_list[i];
+                            printf("\n%d ",i);
+                            while(p->next!=NULL)
+                            {
+                                printf("%d ",p->LOC);
+                                p=p->next;
+                            }
+                            printf("%d",p->LOC);
+                        }
+                        break;
+                    case 7:
+                        exit(1);
+                        break;
+                    default:
+                        printf("\nWrong choice!");
+                    }
+                }while(1);
+                break;
+            case 2:
+                exit(0);
+                break;
+            default:
+                printf("\nWrong choice!");
+        }
+    }while(1);
+    return 0;
+}
