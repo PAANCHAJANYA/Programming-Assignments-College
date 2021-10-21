@@ -1,0 +1,73 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct node
+{
+    int data;
+    struct node* left;
+    struct node* right;
+}node;
+static int count1;
+static int count2;
+static int count3;
+node *create()
+{
+    node *p;
+    char x[2];
+    printf("\nEnter data($ for no node):");
+    scanf("%s",x);
+    if(strcmp(x,"$")==0)
+    {
+       return NULL;
+    }
+    p=(node*)malloc(sizeof(node));
+    p->data=x[0];
+    printf("Enter left child of %c:\n",x[0]);
+    p->left=create();
+    if(p->left==NULL){p->right=NULL;return p;}
+    printf("Enter right child of %c:\n",x[0]);
+    p->right=create();
+    return p;
+}
+int countInorder(struct node *root)
+{
+    if(root!= NULL)
+    {
+        countInorder(root->left);
+        count1++;
+        countInorder(root->right);
+    }
+    return count1;
+}
+int countPreorder(struct node* root)
+{
+    if(root==NULL)
+        return count2;
+    else
+    {
+        count2++;
+        countPreorder(root->left);
+        countPreorder(root->right);
+    }
+}
+int countPostorder(struct node* root)
+{
+    if(root==NULL)
+        return count3;
+    else
+    {
+        countPostorder(root->left);
+        countPostorder(root->right);
+        count3++;
+    }
+}
+int main()
+{
+  struct node *root;
+  printf("\nEnter the elements of the binary tree:");
+  root=create();
+  printf("\nNumber of nodes in the tree trough Inorder traversal is %d", countInorder(root));
+  printf("\nNumber of nodes in the tree trough Postorder traversal is %d", countPostorder(root));
+  printf("\nNumber of nodes in the tree trough Preorder traversal is %d", countPreorder(root));
+  return 0;
+}

@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+typedef struct node
+{
+  char data;
+  struct node *left;
+  struct node *right;
+} node;
+
+node *create()
+{
+    node *p;
+    char x[2];
+    printf("Enter data($ for no node):");
+    scanf("%s",x);
+    if(strcmp(x,"$")==0)
+    {
+       return NULL;
+    }
+    p=(node*)malloc(sizeof(node));
+    p->data=x[0];
+    printf("Enter left child of %c:\n",x[0]);
+    p->left=create();
+    if(p->left==NULL){p->right=NULL;return p;}
+    printf("Enter right child of %c:\n",x[0]);
+    p->right=create();
+    return p;
+}
+int checkEqual(node *A,node *B)
+{
+    if(A==NULL&&B==NULL)
+        return 1;
+    if(A!=NULL&&B!=NULL)
+    {
+        return (A->data==B->data&&checkEqual(A->left,B->left)&&checkEqual(A->right,B->right));
+    }
+    return 0;
+}
+int main()
+{
+  int k;
+  node *firstTree;
+  node *secondTree;
+  printf("\nEnter the elements of the FIRST binary tree:\n");
+  firstTree=create();
+  printf("\nEnter the elements of the SECOND binary tree:\n");
+  fflush(stdin);
+  secondTree=create();
+  k=checkEqual(firstTree,secondTree);
+  if(k)
+    printf("\nBoth the trees are identical!");
+  else
+    printf("\nThe input trees are different!");
+  return 0;
+}
+//OUTPUT: Enter two binary trees to check whether they are identical or not identical

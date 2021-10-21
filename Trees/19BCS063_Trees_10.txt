@@ -1,0 +1,143 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node* left;
+    struct node* right;
+};
+int max(int arr[],int start,int end)
+{
+    int i,max=arr[start],maxind=start;
+    for(i=start+1;i<=end;i++)
+    {
+        if(arr[i]>max)
+        {
+            max=arr[i];
+            maxind=i;
+        }
+    }
+    return maxind;
+}
+struct node* newNode(int data)
+{
+    struct node* node=(struct node*)malloc(sizeof(struct node));
+    node->data=data;
+    node->left=NULL;
+    node->right=NULL;
+    return node;
+}
+struct node* buildTree(int inorder[],int start,int end)
+{
+    if (start>end)
+        return NULL;
+    int i=max(inorder,start,end);
+    struct node *root=newNode(inorder[i]);
+    if(start==end)
+        return root;
+    root->left=buildTree(inorder,start,i-1);
+    root->right=buildTree(inorder,i+1,end);
+    return root;
+}
+struct node *constructTreeUtil(int pre[],char preLN[],int *index_ptr,int n)
+{
+	int index=*index_ptr;
+	if(index==n)
+		return NULL;
+	struct node *temp=newNode(pre[index]);
+	(*index_ptr)++;
+	if(preLN[index]=='N')
+	{
+        temp->left=constructTreeUtil(pre,preLN,index_ptr,n);
+        temp->right=constructTreeUtil(pre,preLN,index_ptr,n);
+	}
+	return temp;
+}
+struct node *constructTree(int pre[],char preLN[],int n)
+{
+	int index=0;
+	return constructTreeUtil(pre,preLN,&index,n);
+}
+void printInorder(struct node* node)
+{
+    if(node==NULL)
+        return;
+    printInorder(node->left);
+    printf("%d ",node->data);
+    printInorder(node->right);
+}
+int main()
+{
+    int *inorder,len,i;
+    struct node* preorder=NULL;
+    printf("\nEnter the number of elements you want to store in the tree:");
+    scanf("%d",&len);
+    inorder=(int*)calloc(sizeof(int),len);
+    printf("\nEnter the numbers in Inorder traversal you want to stored in the tree: ");
+    for(i=0;i<len;i++)
+        scanf("%d",&inorder[i]);
+    struct node *root=buildTree(inorder,0,len-1);
+    printf("\nInorder traversal of the constructed tree is: ");
+    printInorder(root);
+    return 0;
+	char preLN[] = {'N', 'N', 'L', 'L', 'L'};
+	int n = sizeof(pre)/sizeof(pre[0]);
+	root = constructTree (pre, preLN, n);
+	printf("Following is Inorder Traversal of the Constructed Binary Tree: \n");
+	printInorder (root);
+}
+Node* newNode(int data);
+int search(int arr[], int strt, int end, int value);
+Node* buildUtil(int in[], int post[], int inStrt,
+				int inEnd, int* pIndex)
+{
+	if (inStrt > inEnd)
+		return NULL;
+	Node* node = newNode(post[*pIndex]);
+	(*pIndex)--;
+	if (inStrt == inEnd)
+		return node;
+	int iIndex = search(in, inStrt, inEnd, node->data);
+	node->right = buildUtil(in, post, iIndex + 1, inEnd, pIndex);
+	node->left = buildUtil(in, post, inStrt, iIndex - 1, pIndex);
+	return node;
+}
+Node* buildTree(int in[], int post[], int n)
+{
+	int pIndex = n - 1;
+	return buildUtil(in, post, 0, n - 1, &pIndex);
+}
+int search(int arr[], int strt, int end, int value)
+{
+	int i;
+	for (i = strt; i <= end; i++) {
+		if (arr[i] == value)
+			break;
+	}
+	return i;
+}
+Node* newNode(int data)
+{
+	Node* node = (Node*)malloc(sizeof(Node));
+	node->data = data;
+	node->left = node->right = NULL;
+	return (node);
+}
+void preOrder(Node* node)
+{
+	if (node == NULL)
+		return;
+	printf("%d ", node->data);
+	preOrder(node->left);
+	preOrder(node->right);
+}
+int main()
+{
+	int in[] = { 4, 8, 2, 5, 1, 6, 3, 7 };
+	int post[] = { 8, 4, 5, 2, 6, 7, 3, 1 };
+	int n = sizeof(in) / sizeof(in[0]);
+	Node* root = buildTree(in, post, n);
+	cout << "Preorder of the constructed tree : \n";
+	preOrder(root);
+	return 0;
+}

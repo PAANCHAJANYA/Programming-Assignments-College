@@ -1,0 +1,59 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct node
+{
+  char data;
+  struct node *left;
+  struct node *right;
+} node;
+
+node *create()
+{
+    node *p;
+    char x[2];
+    printf("\nEnter data($ for no node):");
+    scanf("%s",x);
+    if(strcmp(x,"$")==0)
+    {
+       return NULL;
+    }
+    p=(node*)malloc(sizeof(node));
+    p->data=x[0];
+    printf("Enter left child of %c:\n",x[0]);
+    p->left=create();
+    if(p->left==NULL){p->right=NULL;return p;}
+    printf("Enter right child of %c:\n",x[0]);
+    p->right=create();
+    return p;
+}
+node* cloneBinaryTree(node* original)
+{
+    node *clone;
+    clone=(node*)malloc(sizeof(node));
+    if(original==NULL)
+        return NULL;
+    clone->data=original->data;
+    clone->left=cloneBinaryTree(original->left);
+    clone->right=cloneBinaryTree(original->right);
+    return clone;
+}
+int main()
+{
+  node *originalTree;
+  node *cloneRoot;
+  node *cloneLeftSubtree;
+  node *cloneRightSubtree;
+  printf("\nEnter the elements of the binary tree:");
+  originalTree=create();
+  printf("\nThe tree is stored and the pointer pointing to it is \"originalTree\"");
+  cloneRoot=cloneBinaryTree(originalTree);
+  cloneLeftSubtree=cloneBinaryTree(originalTree->left);
+  cloneRightSubtree=cloneBinaryTree(originalTree->right);
+  printf("\nThe root of the tree is cloned and the pointer pointing to it is \"cloneRoot\"");
+  printf("\nThe left sub tree is cloned and the pointer pointing to it is \"cloneLeftSubtree\"");
+  printf("\nThe right sub tree is cloned and the pointer pointing to it is \"cloneRightSubtree\"");
+  return 0;
+}
+
+

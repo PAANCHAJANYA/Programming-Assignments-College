@@ -1,0 +1,169 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct tree
+{
+    char data;
+    struct tree *left;
+    struct tree *middle;
+    struct tree *right;
+};
+void createTree();
+int main()
+{
+    createTree();
+    return 0;
+}
+void createTree()
+{
+    struct tree *vruksh;
+    struct tree *p;
+    struct tree *y;
+    struct tree *n;
+    struct tree *z;
+    int l=0,len,i=0,k,m;
+    char str1[50];
+    printf("Enter the generalized list through which you want to attain the tree (<50 characters)(at most 3 siblings and 4 generations):");
+    scanf("%s",str1);
+    if(strcmp(str1,"()")==0){printf("\nEmpty Tree!\n"); exit(3);}
+    else if(strlen(str1)==3){printf("%c\nThe tree has only a root!\n",str1[1]); exit(4);}
+    len=strlen(str1);
+    vruksh=(struct tree*)malloc(sizeof(struct tree));
+    p=(struct tree*)malloc(sizeof(struct tree));
+    p->left=p->middle=p->right=NULL;
+    n=(struct tree*)malloc(sizeof(struct tree));
+    n->left=n->middle=n->right=NULL;
+    y=(struct tree*)malloc(sizeof(struct tree));
+    y->left=y->middle=y->right=NULL;
+    z=(struct tree*)malloc(sizeof(struct tree));
+    z->left=z->middle=z->right=NULL;
+    vruksh->left=(struct tree*)malloc(sizeof(struct tree));
+    vruksh->right=vruksh->middle=NULL;
+    (vruksh->left)->left=(struct tree*)malloc(sizeof(struct tree));
+    vruksh->left->left->left=vruksh->left->right=vruksh->left->middle=vruksh->left->left->right=vruksh->left->left->middle=NULL;
+    vruksh->data='$';
+    p=vruksh;
+    z=vruksh->left;
+    y=(vruksh->left)->left;
+    while(i<len)
+    {
+        if(str1[i]=='(')
+        {
+            i++;
+            n=p;
+            if(p->left==NULL)
+            {
+                p->left=(struct tree*)malloc(sizeof(struct tree));
+                (p->left)->left=(p->left)->middle=(p->left)->right=NULL;
+            }
+            p=p->left;
+            p->data=str1[i];
+            i++;
+        }
+        else if(str1[i]==',')
+        {
+            i++;
+            if(n->middle==NULL)
+            {
+                n->middle=(struct tree*)malloc(sizeof(struct tree));
+                (n->middle)->left=(n->middle)->middle=(n->middle)->right=NULL;
+                p=n->middle;
+                l=0;
+            }
+            else if(n->right==NULL)
+            {
+                n->right=(struct tree*)malloc(sizeof(struct tree));
+                (n->right)->left=(n->right)->middle=(n->right)->right=NULL;
+                p=n->right;
+                l=0;
+            }
+            else
+            {
+                printf("\nToo many siblings!");
+                exit(1);
+            }
+            p->data=str1[i];
+            i++;
+        }
+        else if(str1[i]==')')
+        {
+            l++;
+            if(y->middle!=NULL)
+            {
+                if((y->middle)->data==n->data)
+                    y=z;
+                else if(((y->middle)->left)!=NULL)
+                {
+                    if(((y->middle)->left)->data==n->data)
+                        y=y->middle;
+                }
+                else if(((y->middle)->middle)!=NULL)
+                {
+                    if(((y->middle)->middle)->data==n->data)
+                        y=y->middle;
+                }
+                else if(((y->middle)->right)!=NULL)
+                {
+                    if(((y->middle)->right)->data==n->data)
+                        y=y->middle;
+                }
+                else{}
+            }
+            if(y->right!=NULL)
+            {
+                if((y->right)->data==n->data)
+                    y=z;
+                if(((y->right)->left)!=NULL)
+                {
+                    if(((y->right)->left)->data==n->data)
+                        y=y->right;
+                }
+                else if(((y->right)->middle)!=NULL)
+                {
+                    if(((y->right)->middle)->data==n->data)
+                        y=y->right;
+                }
+                else if(((y->right)->right)!=NULL)
+                {
+                    if(((y->right)->right)->data==n->data)
+                        y=y->right;
+                }
+                else{}
+            }
+            if(l==1)
+            {
+                if(y->data==n->data)
+                {
+                    n=z;
+                    y=z;
+                }
+                else
+                    n=y;
+                p=y;
+            }
+            else if(l==2)
+            {
+                p=z;
+                n=z;
+                l=0;
+            }
+            else
+            {
+                printf("\nToo many generations!");
+            }
+            i++;
+        }
+        else
+        {
+            printf("\nNot having single character data!");
+            exit(0);
+        }
+    }
+    p=z;
+    k=0;
+    printf("\nThe tree is stored in a linked list with the pointer named \"vruksh\"");
+    printf("                                               %c\n\n",(p!=NULL)?p->data:' ');
+    printf("              %c                               %c                               %c\n\n",(p->left)!=NULL?(p->left)->data:' ',(p->middle)!=NULL?(p->middle)->data:' ',(p->right)!=NULL?(p->right)->data:' ');
+    printf("   %c         %c         %c    |    %c         %c         %c    |    %c         %c         %c\n\n",(p->left!=NULL && (p->left)->left!=NULL)?((p->left)->left)->data:' ',(p->left!=NULL && (p->left)->middle!=NULL)?((p->left)->middle)->data:' ',(p->left!=NULL && (p->left)->right!=NULL)?((p->left)->right)->data:' ',(p->middle!=NULL && p->middle->left!=NULL)?((p->middle)->left)->data:' ',(p->middle!=NULL && (p->middle)->middle!=NULL)?((p->middle)->middle)->data:' ',(p->middle!=NULL&&(p->middle)->right!=NULL)?((p->middle)->right)->data:' ',(p->right!=NULL && (p->right)->left!=NULL)?((p->right)->left)->data:' ',(p->right!=NULL&&(p->right)->middle!=NULL)?((p->right)->middle)->data:' ',(p->right!=NULL&&(p->right)->right!=NULL)?((p->right)->right)->data:' ');
+    printf("%c %c %c | %c %c %c | %c %c %c | %c %c %c | %c %c %c | %c %c %c | %c %c %c | %c %c %c | %c %c %c\n\n",(p->left!=NULL && (p->left)->left!=NULL && (((p->left)->left)->left)!=NULL)?(((p->left)->left)->left)->data:' ',(p->left!=NULL && (p->left)->left!=NULL && (((p->left)->left)->middle)!=NULL)?(((p->left)->left)->middle)->data:' ',(p->left!=NULL && (p->left)->left!=NULL && (((p->left)->left)->right)!=NULL)?(((p->left)->left)->right)->data:' ',(p->left!=NULL && (p->left)->middle!=NULL && (((p->left)->middle)->left)!=NULL)?(((p->left)->middle)->left)->data:' ',(p->left!=NULL && (p->left)->middle!=NULL && (((p->left)->middle)->middle)!=NULL)?(((p->left)->middle)->middle)->data:' ',(p->left!=NULL && (p->left)->middle!=NULL && (((p->left)->middle)->right)!=NULL)?(((p->left)->middle)->right)->data:' ',(p->left!=NULL && (p->left)->right!=NULL &&((p->left)->right)->left!=NULL)?(((p->left)->right)->left)->data:' ',(p->left!=NULL && (p->left)->right!=NULL &&((p->left)->right)->middle!=NULL)?(((p->left)->right)->middle)->data:' ',(p->left!=NULL && (p->left)->right!=NULL &&((p->left)->right)->right!=NULL)?(((p->left)->right)->right)->data:' ',(p->middle!=NULL && (p->middle)->left!=NULL && ((p->middle)->left)->left!=NULL)?(((p->middle)->left)->left)->data:' ',(p->middle!=NULL && (p->middle)->left!=NULL && ((p->middle)->left)->middle!=NULL)?(((p->middle)->left)->middle)->data:' ',(p->middle!=NULL && (p->middle)->left!=NULL && ((p->middle)->left)->right!=NULL)?(((p->middle)->left)->right)->data:' ',(p->middle!=NULL && (p->middle)->middle!=NULL && ((p->middle)->middle)->left!=NULL)?(((p->middle)->middle)->left)->data:' ',(p->middle!=NULL && (p->middle)->middle!=NULL && ((p->middle)->middle)->middle!=NULL)?(((p->middle)->middle)->middle)->data:' ',(p->middle!=NULL && (p->middle)->middle!=NULL && ((p->middle)->middle)->right!=NULL)?(((p->middle)->middle)->right)->data:' ',(p->middle!=NULL && (p->middle)->right!=NULL && ((p->middle)->right)->left!=NULL)?(((p->middle)->right)->left)->data:' ',(p->middle!=NULL && (p->middle)->right!=NULL && ((p->middle)->right)->middle!=NULL)?(((p->middle)->right)->middle)->data:' ',(p->middle!=NULL && (p->middle)->right!=NULL && ((p->middle)->right)->right!=NULL)?(((p->middle)->right)->right)->data:' ',(p->right!=NULL && (p->right)->left!=NULL && ((p->right)->left)->left!=NULL)?(((p->right)->left)->left)->data:' ',(p->right!=NULL && (p->right)->left!=NULL && ((p->right)->left)->middle!=NULL)?(((p->right)->left)->middle)->data:' ',(p->right!=NULL && (p->right)->left!=NULL && ((p->right)->left)->right!=NULL)?(((p->right)->left)->right)->data:' ',(p->right!=NULL && (p->right)->middle!=NULL && ((p->right)->middle)->left!=NULL)?(((p->right)->middle)->left)->data:' ',(p->right!=NULL && (p->right)->middle!=NULL && ((p->right)->middle)->middle!=NULL)?(((p->right)->middle)->middle)->data:' ',(p->right!=NULL && (p->right)->middle!=NULL && ((p->right)->middle)->right!=NULL)?(((p->right)->middle)->right)->data:' ',(p->right!=NULL && (p->right)->right!=NULL && ((p->right)->right)->left!=NULL)?(((p->right)->right)->left)->data:' ',(p->right!=NULL && (p->right)->right!=NULL && ((p->right)->right)->middle!=NULL)?(((p->right)->right)->middle)->data:' ',(p->right!=NULL && (p->right)->right!=NULL && ((p->right)->right)->right!=NULL)?(((p->right)->right)->right)->data:' ');
+}

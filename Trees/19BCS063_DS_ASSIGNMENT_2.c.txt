@@ -1,0 +1,59 @@
+//Write a function that reverses the process in above i.e., takes a pointer to a tree and outputs it as a generalized list
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+char str1[50]={};
+int t=0,s=0;
+typedef struct node
+{
+  char data;
+  struct node *left;
+  struct node *right;
+} node;
+
+node *create()
+{
+    node *p;
+    char x[2];
+    printf("Enter data($ for no node):");
+    scanf("%s",x);
+    fflush(stdin);
+    if(strcmp(x,"$")==0)
+    {
+       return NULL;
+    }
+    if(t==0)
+    {
+        strcat(str1,"(");
+        strcat(str1,x);
+    }
+    else if(t==1)
+    {
+        strcat(str1,",");
+        strcat(str1,x);
+        t=0;
+    }
+    p=(node*)malloc(sizeof(node));
+    p->data=x[0];
+    printf("Enter left child of %c:\n",x[0]);
+    p->left=create();
+    if(p->left==NULL){return p;}
+    fflush(stdin);
+    t=1;
+    printf("Enter right child of %c:\n",x[0]);
+    p->right=create();
+    fflush(stdin);
+    strcat(str1,")");
+    return p;
+}
+int main()
+{
+  node *root;
+  printf("\nEnter the elements of the binary tree:");
+  root=create();
+  printf("\nThe tree is stored in a linked list with the pointer named \"pedh\".....\nNow converting it to a generalized list.....");
+  printf("\n%s",strcat(str1,")"));
+  return 0;
+}
+//INPUT:ENTER AS PER THE INSTRUCTIONS GIVEN WHILE RUNNING THE PROGRAM

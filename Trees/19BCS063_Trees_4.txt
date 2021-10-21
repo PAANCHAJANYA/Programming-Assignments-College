@@ -1,0 +1,96 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct node
+{
+  char data;
+  struct node *left;
+  struct node *right;
+}node;
+node *create()
+{
+    node *p;
+    char x[2];
+    printf("\nEnter data($ for no node):");
+    scanf("%s",x);
+    if(strcmp(x,"$")==0)
+    {
+       p=NULL;
+       return NULL;
+    }
+    p=(node*)malloc(sizeof(node));
+    p->data=x[0];
+    printf("Enter left child of %c:\n",x[0]);
+    p->left=create();
+    if(p->left==NULL){p->right=NULL;return p;}
+    printf("Enter right child of %c:\n",x[0]);
+    p->right=create();
+    return p;
+}
+int countLeaf(node *k)
+{
+    if(k==NULL)
+        return 0;
+    if(k->left==NULL&&k->right==NULL)
+        return 1;
+    else
+        return (countLeaf(k->left)+countLeaf(k->right));
+}
+static int count=0;
+int countnodes(node *root)
+{
+
+    if(root!=NULL)
+    {
+        countnodes(root->left);
+        count++;
+        countnodes(root->right);
+    }
+    return count;
+}
+void printLevel(node *root, int level)
+{
+    if(root==NULL)
+        return;
+    if(level==1)
+        printf("%c ",root->data);
+    else if(level>1)
+    {
+        printLevel(root->left,level-1);
+        printLevel(root->right,level-1);
+    }
+}
+int height(node *root)
+{
+    if(root==NULL)
+        return 0;
+    else
+    {
+        int lh=height(root->left);
+        int rh=height(root->right);
+        if(lh>rh)
+            return (lh+1);
+        else
+            return (rh+1);
+    }
+}
+void levelOrder(node* root)
+{
+    int h=height(root),i;
+    for(i=1;i<=h;i++)
+    {
+        printf("\nLevel %d:",i);
+        printLevel(root,i);
+    }
+}
+int main()
+{
+  node *root;
+  printf("\nEnter the elements of the binary tree:");
+  root=create();
+  printf("\nThe number of leaf nodes in the input binary tree is %d",countLeaf(root));
+  printf("\nThe number of non leaf nodes in the input binary tree is %d",countnodes(root)-countLeaf(root));
+  levelOrder(root);
+  return 0;
+}
+
