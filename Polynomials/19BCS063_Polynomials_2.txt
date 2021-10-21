@@ -1,0 +1,26 @@
+#include<stdio.h>
+#include<stdlib.h>
+int coeff(int a);
+int n;
+struct krishna
+{
+	int coefficient;
+	int exponent;
+}k[10];
+int main()
+{
+	int x,z,i;
+	printf("Enter the degree of the polynomial:");
+	scanf("%d", &n);
+	for(i=n;i>=0;i--)
+	{
+		printf("\nEnter the coefficient of x with power %d:", i);
+		scanf("%d", &k[i].coefficient);
+		k[i].exponent=i;
+	}
+	printf("The polynomial is: ");
+	for(i=n;i>=1;i--)
+		printf("%dx^%d%c",k[i].coefficient,k[i].exponent,(k[i-1].coefficient>=0)?'+':'\0');
+	printf("%d",k[0].coefficient);
+    return 0;
+}
